@@ -57,10 +57,10 @@ namespace OsEngine.Robots.Trend
             _envelop1.MovingAverage.Lenght = EnvelopMovingLength.ValueInt;
             //_envelop1.ColorUp = Color.Red;
 
-            _envelop2.Deviation = EnvelopDeviation.ValueDecimal * 1.5m;
+            _envelop2.Deviation = EnvelopDeviation.ValueDecimal * 2m;
             _envelop2.MovingAverage.Lenght = EnvelopMovingLength.ValueInt;
 
-            _envelop3.Deviation = EnvelopDeviation.ValueDecimal * 2.5m;
+            _envelop3.Deviation = EnvelopDeviation.ValueDecimal * 3m;
             _envelop3.MovingAverage.Lenght = EnvelopMovingLength.ValueInt;
 
             ParametrsChangeByUser += MyTest_ParametrsChangeByUser;
@@ -71,10 +71,10 @@ namespace OsEngine.Robots.Trend
             _envelop1.Deviation = EnvelopDeviation.ValueDecimal;
             _envelop1.MovingAverage.Lenght = EnvelopMovingLength.ValueInt;
 
-            _envelop2.Deviation = EnvelopDeviation.ValueDecimal * 1.5m;
+            _envelop2.Deviation = EnvelopDeviation.ValueDecimal * 2m;
             _envelop2.MovingAverage.Lenght = EnvelopMovingLength.ValueInt;
 
-            _envelop3.Deviation = EnvelopDeviation.ValueDecimal * 2.5m;
+            _envelop3.Deviation = EnvelopDeviation.ValueDecimal * 3m;
             _envelop3.MovingAverage.Lenght = EnvelopMovingLength.ValueInt;
 
             _envelop1.Reload();
@@ -194,6 +194,12 @@ namespace OsEngine.Robots.Trend
             _prev_envelop3_Down = _envelop3.ValuesDown[_envelop3.ValuesUp.Count - 2];
             _last_envelop3_Up = _envelop3.ValuesUp[_envelop3.ValuesUp.Count - 1];
             _last_envelop3_Down = _envelop3.ValuesDown[_envelop3.ValuesUp.Count - 1];
+
+            _prev_envelop2_Up = _envelop2.ValuesUp[_envelop2.ValuesUp.Count - 2];
+            _prev_envelop2_Down = _envelop2.ValuesDown[_envelop2.ValuesUp.Count - 2];
+            _last_envelop2_Up = _envelop2.ValuesUp[_envelop2.ValuesUp.Count - 1];
+            _last_envelop2_Down = _envelop2.ValuesDown[_envelop2.ValuesUp.Count - 1];
+
             _last_sma = _sma.Values[_sma.Values.Count - 1];
 
 
@@ -201,13 +207,22 @@ namespace OsEngine.Robots.Trend
 
             if(positions.Count == 0)
             { // open logic
-                if (_prev_envelop3_Down > _last_sma && _last_envelop3_Down <= _last_sma
+                if (_prev_envelop3_Down > _sma.Values[_sma.Values.Count - 2] && _last_envelop3_Down <= _sma.Values[_sma.Values.Count - 1]
                                       && Regime.ValueString != "OnlyLong")
                 {
-                    _tab.BuyAtMarket(Volume.ValueDecimal);
+                    _tab.BuyAtMarket(Volume.ValueDecimal, "Down 3:" + _prev_envelop3_Down.ToString(" 0.00") + _last_envelop3_Down.ToString(" 0.00") + _last_sma.ToString(" 0.00"));
                     //_tab.BuyAtLimit(Volume.ValueDecimal, _lastClose + Slippage.ValueInt * _tab.Securiti.PriceStep);
 
                     _open_pos_mode = 3;
+                }
+
+                if (_prev_envelop2_Down > _sma.Values[_sma.Values.Count - 2] && _last_envelop2_Down <= _sma.Values[_sma.Values.Count - 1]
+                                      && Regime.ValueString != "OnlyLong")
+                {
+                    _tab.BuyAtMarket(Volume.ValueDecimal, "Down 2:" + _prev_envelop2_Down.ToString(" 0.00") + _last_envelop2_Down.ToString(" 0.00") + _last_sma.ToString(" 0.00"));
+                    //_tab.BuyAtLimit(Volume.ValueDecimal, _lastClose + Slippage.ValueInt * _tab.Securiti.PriceStep);
+
+                    _open_pos_mode = 2;
                 }
                 //_tab.BuyAtStop(Volume.ValueDecimal,
                 //    _envelop1.ValuesUp[_envelop1.ValuesUp.Count - 1] + 
@@ -251,7 +266,7 @@ namespace OsEngine.Robots.Trend
 
                         decimal orderPrice = activationPrice - _tab.Securiti.PriceStep * Slippage.ValueDecimal;
 
-                    _tab.CloseAtTrailingStop(positions[0], activationPrice, orderPrice);
+                    _tab.CloseAtTrailingStop(positions[0], activationPrice, orderPrice, "CloseAtTrailingStop");
                 }
                 if (positions[0].Direction == Side.Sell)
                 {
