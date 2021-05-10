@@ -870,6 +870,10 @@
     <Compile Include="Robots\OnScriptIndicators\RsiTrade.cs" />
     <Compile Include="Robots\OnScriptIndicators\RviTrade.cs" />
     <Compile Include="Robots\OnScriptIndicators\TimeOfDayBot.cs" />
+    <Compile Include="Robots\Test\FractalTest.cs" />
+    <Compile Include="Robots\Test\MyEnvelopTrend.cs" />
+    <Compile Include="Robots\Test\MyLRCBot.cs" />
+    <Compile Include="Robots\Test\MyMacdBot.cs" />
     <Compile Include="Robots\Trend\EnvelopTrend.cs" />
     <Compile Include="Robots\Trend\MomentumMacd.cs" />
     <Compile Include="Robots\MarketMaker\PairTraderSpreadSma.cs" />

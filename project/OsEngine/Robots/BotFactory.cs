@@ -36,6 +36,7 @@ namespace OsEngine.Robots
         public static List<string> GetNamesStrategy()
         {
             List<string> result = new List<string>();
+            result.Add("MyTest");
             result.Add("Fisher");
             result.Add("Engine");
             result.Add("ClusterEngine");
@@ -113,7 +114,12 @@ namespace OsEngine.Robots
                 bot = CreateScriptStrategyByName(nameClass, name, startProgram);
                 return bot;
             }
+
             
+            if (nameClass == "MyTest")
+            {
+                bot = new MyTest(name, startProgram);
+            }
             if (nameClass == "TimeOfDayBot")
             {
                 bot = new TimeOfDayBot(name, startProgram);
