@@ -153,13 +153,13 @@ namespace OsEngine.Robots.Trend
 
             if (position.Direction == Side.Buy)
             {
-                decimal activationPrice = _envelop3.ValuesUp[_envelop3.ValuesUp.Count - 1] -
-                    _envelop3.ValuesUp[_envelop3.ValuesUp.Count - 1] * (TrailStop.ValueDecimal / 100);
+                decimal activationPrice = _envelop3.ValuesDown[_envelop3.ValuesDown.Count - 1] -
+                    _envelop3.ValuesDown[_envelop3.ValuesDown.Count - 1] * (TrailStop.ValueDecimal / 100);
 
                 decimal orderPrice = activationPrice - _tab.Securiti.PriceStep * Slippage.ValueDecimal;
 
                 _tab.CloseAtTrailingStop(position,
-                    activationPrice, orderPrice, "_tab_PositionOpeningSuccesEvent");
+                    activationPrice, orderPrice, "_tab_SuccesEvent");
 
                 //_tab.CloseAtStop(position, position.EntryPrice - Stop.ValueInt * _tab.Securiti.PriceStep, position.EntryPrice - Stop.ValueInt * _tab.Securiti.PriceStep); _tab.CloseAtStop(position, position.EntryPrice - Stop.ValueInt * _tab.Securiti.PriceStep, position.EntryPrice - Stop.ValueInt * _tab.Securiti.PriceStep);
                 //_tab.CloseAtProfit(position, position.EntryPrice + Profit.ValueInt * _tab.Securiti.PriceStep, position.EntryPrice + Profit.ValueInt * _tab.Securiti.PriceStep);
@@ -215,7 +215,7 @@ namespace OsEngine.Robots.Trend
 
                     _open_pos_mode = 3;
                 }
-
+                else
                 if (_prev_envelop2_Down > _sma.Values[_sma.Values.Count - 2] && _last_envelop2_Down <= _sma.Values[_sma.Values.Count - 1]
                                       && Regime.ValueString != "OnlyLong")
                 {
@@ -223,6 +223,15 @@ namespace OsEngine.Robots.Trend
                     //_tab.BuyAtLimit(Volume.ValueDecimal, _lastClose + Slippage.ValueInt * _tab.Securiti.PriceStep);
 
                     _open_pos_mode = 2;
+                }
+                else
+                if (_prev_envelop1_Down > _sma.Values[_sma.Values.Count - 2] && _last_envelop1_Down <= _sma.Values[_sma.Values.Count - 1]
+                                      && Regime.ValueString != "OnlyLong")
+                {
+                    _tab.BuyAtMarket(Volume.ValueDecimal, "Down 1:" + _prev_envelop1_Down.ToString(" 0.00") + _last_envelop1_Down.ToString(" 0.00") + _last_sma.ToString(" 0.00"));
+                    //_tab.BuyAtLimit(Volume.ValueDecimal, _lastClose + Slippage.ValueInt * _tab.Securiti.PriceStep);
+
+                    _open_pos_mode = 1;
                 }
                 //_tab.BuyAtStop(Volume.ValueDecimal,
                 //    _envelop1.ValuesUp[_envelop1.ValuesUp.Count - 1] + 
@@ -246,11 +255,11 @@ namespace OsEngine.Robots.Trend
 
                 if(positions[0].Direction == Side.Buy)
                 {
-                    decimal activationPrice = _last_envelop3_Up - _last_envelop3_Up * (TrailStop.ValueDecimal / 100);
+                    decimal activationPrice = _last_envelop3_Down - _last_envelop3_Down * (TrailStop.ValueDecimal / 100);
 
                     if (_open_pos_mode == 3)
                     {
-                        activationPrice = _last_envelop3_Up - _last_envelop3_Up * (TrailStop.ValueDecimal / 100);
+                        activationPrice = _last_envelop3_Down - _last_envelop3_Down * (TrailStop.ValueDecimal / 100);
                     }
                     else
                     if (_open_pos_mode == 2)
@@ -259,7 +268,7 @@ namespace OsEngine.Robots.Trend
                     }
                     else
                     {
-                        activationPrice = _last_envelop1_Up -+ _last_envelop1_Up * (TrailStop.ValueDecimal / 100);
+                        activationPrice = _last_envelop1_Up - _last_envelop1_Up * (TrailStop.ValueDecimal / 100);
                     }
 
 
