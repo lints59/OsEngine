@@ -5463,14 +5463,14 @@ namespace OsEngine.Charts.CandleChart
             {
                 if (e.Delta > 0)
                 {
-                    _chart.ChartAreas[0].AxisX.ScaleView.Position = _chart.ChartAreas[0].AxisX.ScaleView.Position + 500 < _myCandles.Count - (int)_chart.ChartAreas[0].AxisX.ScaleView.Size
-                            ? _chart.ChartAreas[0].AxisX.ScaleView.Position + 500
+                    _chart.ChartAreas[0].AxisX.ScaleView.Position = _chart.ChartAreas[0].AxisX.ScaleView.Position + (int)_chart.ChartAreas[0].AxisX.ScaleView.Size < _myCandles.Count - (int)_chart.ChartAreas[0].AxisX.ScaleView.Size
+                            ? _chart.ChartAreas[0].AxisX.ScaleView.Position + (int)_chart.ChartAreas[0].AxisX.ScaleView.Size
                             : _myCandles.Count - (int)_chart.ChartAreas[0].AxisX.ScaleView.Size;
                 }
                 else
                 {
-                    _chart.ChartAreas[0].AxisX.ScaleView.Position = _chart.ChartAreas[0].AxisX.ScaleView.Position - 500 > 0
-                            ? _chart.ChartAreas[0].AxisX.ScaleView.Position - 500
+                    _chart.ChartAreas[0].AxisX.ScaleView.Position = _chart.ChartAreas[0].AxisX.ScaleView.Position - (int)_chart.ChartAreas[0].AxisX.ScaleView.Size > 0
+                            ? _chart.ChartAreas[0].AxisX.ScaleView.Position - (int)_chart.ChartAreas[0].AxisX.ScaleView.Size
                             : 0;
                 }
             }
